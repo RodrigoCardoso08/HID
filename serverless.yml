@@ -1,0 +1,28 @@
+service: HID65
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  profile: hid-rods
+  environment:
+    SERVICE_NAME: hid65
+    STAGE: dev
+    TWILIO_SMS_SERVICE_SID: MG4de01f4e7a9cdd65791fec1a799bd453
+    # ALERT_SMS_NUMBER: +5518981294701
+    TWILIO_API_KEY: SK84c9d1d2e562b3d3d85ca6deb0b57b85
+    TWILIO_API_SECRET: vQ78EiEfA5AfPUcsUi75iErQ2HW0Dl9N
+    TWILIO_ACCOUNT_SID: ACab4e797fd1f76d7cffcd2436cb21028e
+
+functions:
+  store-sensor-data:
+    handler: handler.store_sensor_data
+    layers:
+      - arn:aws:lambda:us-east-1:841162714201:layer:db-communication:1
+      - arn:aws:lambda:us-east-1:841162714201:layer:twilio-client:1
+
+    events:
+      - http:
+          path: store-sensor-data
+          method: post
